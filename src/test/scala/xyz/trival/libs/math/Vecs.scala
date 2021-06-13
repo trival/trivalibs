@@ -12,7 +12,7 @@ class Vec2Tests extends FunSuite:
   }
 
   test("length") {
-    Vec2(4, 3).length ==> 6
+    Vec2(4, 3).length ==> 5
   }
 
   test("can add") {
