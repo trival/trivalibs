@@ -1,11 +1,6 @@
 package xyz.trival.libs.math.vecs
 
 sealed trait Vec[A](val size: Int):
-  private def add(a: Double, b: Double) = a + b
-  private def sub(a: Double, b: Double) = a - b
-  private def mul(a: Double, b: Double) = a * b
-  private def div(a: Double, b: Double) = a / b
-
   inline def map(inline f: Double => Double): A
   inline def mapConst(
       inline f: (Double, Double) => Double,
@@ -20,19 +15,19 @@ sealed trait Vec[A](val size: Int):
       b: A
   ): B
 
-  inline def +(v: A): A = combine(add, v)
-  inline def +(a: Double): A = mapConst(add, a)
-  inline def *(v: A): A = combine(mul, v)
-  inline def *(a: Double): A = mapConst(mul, a)
-  inline def -(v: A): A = combine(sub, v)
-  inline def -(a: Double): A = mapConst(sub, a)
-  inline def /(v: A): A = combine(div, v)
-  inline def /(a: Double): A = mapConst(div, a)
+  inline def +(v: A): A = combine(_ + _, v)
+  inline def +(a: Double): A = mapConst(_ + _, a)
+  inline def *(v: A): A = combine(_ * _, v)
+  inline def *(a: Double): A = mapConst(_ * _, a)
+  inline def -(v: A): A = combine(_ - _, v)
+  inline def -(a: Double): A = mapConst(_ - _, a)
+  inline def /(v: A): A = combine(_ / _, v)
+  inline def /(a: Double): A = mapConst(_ / _, a)
 
   inline def length = Math.sqrt(foldLeft(0.0)((l, n) => l + (n * n)))
   inline def normalize = this / length
 
-  inline infix def dot(v: A) = foldCombine(0.0, add, mul, v)
+  inline infix def dot(v: A) = foldCombine(0.0, _ + _, _ * _, v)
 
   inline def limit(maxLength: Double): A =
     val l = length
