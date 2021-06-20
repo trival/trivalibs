@@ -46,9 +46,15 @@ case class Vec2(x: Double, y: Double)
     with PartialVectors2(x, y):
 
   inline def map(inline f: Double => Double) = Vec2(f(x), f(y))
-  inline def mapConst(inline f: (Double, Double) => Double, c: Double) =
+  inline def mapConst(
+      inline f: (Double, Double) => Double,
+      c: Double
+  ) =
     Vec2(f(x, c), f(y, c))
-  inline def combine(inline f: (Double, Double) => Double, b: Vec2) =
+  inline def combine(
+      inline f: (Double, Double) => Double,
+      b: Vec2
+  ) =
     Vec2(f(x, b.x), f(y, b.y))
   inline def foldLeft[B](start: B)(inline f: (B, Double) => B): B =
     f(f(start, x), y)
