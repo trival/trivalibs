@@ -1,6 +1,8 @@
 package xyz.trival.libs.math.vecs
 
-sealed trait Vec[A](val size: Int):
+sealed trait Vec
+
+trait VecBase[A <: Vec]:
   inline def map(inline f: Double => Double): A
   inline def mapConst(
       inline f: (Double, Double) => Double,
@@ -34,13 +36,15 @@ sealed trait Vec[A](val size: Int):
     if (maxLength < l) then this * (maxLength / l)
     else this.asInstanceOf[A]
 
-end Vec
+end VecBase
 
 // === Vec2 ===
 
 case class Vec2(x: Double, y: Double)
-    extends Vec[Vec2](2)
+    extends Vec
+    with VecBase[Vec2]
     with PartialVectors2(x, y):
+
   inline def map(inline f: Double => Double) = Vec2(f(x), f(y))
   inline def mapConst(inline f: (Double, Double) => Double, c: Double) =
     Vec2(f(x, c), f(y, c))
@@ -58,16 +62,20 @@ case class Vec2(x: Double, y: Double)
 
   inline def cross(v: Vec2) =
     x * v.y - y * v.x
+
 end Vec2
 
 case object Vec2:
   inline def apply(a: Double): Vec2 = Vec2(a, a)
+
+  val zero = Vec2(0.0)
 end Vec2
 
 // === Vec3 ===
 
 case class Vec3(x: Double, y: Double, z: Double)
-    extends Vec[Vec3](3)
+    extends Vec
+    with VecBase[Vec3]
     with PartialVectors2(x, y)
     with PartialVectors3(x, y, z):
 
@@ -98,12 +106,16 @@ case object Vec3:
   inline def apply(a: Double): Vec3 = Vec3(a, a, a)
   inline def apply(v: Vec2, a: Double): Vec3 = Vec3(v.x, v.y, a)
   inline def apply(a: Double, v: Vec2): Vec3 = Vec3(a, v.x, v.y)
+
+  val zero = Vec3(0.0)
+
 end Vec3
 
 // === Vec4 ===
 
 case class Vec4(x: Double, y: Double, z: Double, w: Double)
-    extends Vec[Vec4](4)
+    extends Vec
+    with VecBase[Vec4]
     with PartialVectors2(x, y)
     with PartialVectors3(x, y, z)
     with PartialVectors4(x, y, z, w):
@@ -138,6 +150,9 @@ case object Vec4:
   inline def apply(v: Vec2, a: Double, b: Double): Vec4 = Vec4(v.x, v.y, a, b)
   inline def apply(a: Double, v: Vec2, b: Double): Vec4 = Vec4(a, v.x, v.y, b)
   inline def apply(a: Double, b: Double, v: Vec2): Vec4 = Vec4(a, b, v.x, v.y)
+
+  val zero = Vec4(0.0)
+
 end Vec4
 
 // === Extensions ===
